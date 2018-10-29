@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginStart="16dp"
+    android:layout_marginEnd="16dp"
+    android:layout_marginTop="8dp"
+    android:elevation="2dp"
+    xmlns:tool="http://schemas.android.com/tools"
+    android:minHeight="200dp">
+
+    <android.support.constraint.ConstraintLayout
+        android:id="@+id/content_holder"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/review_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:textSize="20sp"
+            app:layout_constraintBottom_toTopOf="@id/multimedia"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tool:text="Header title" />
+
+        <ImageView
+            android:id="@+id/multimedia"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:minHeight="140dp"
+            app:layout_constraintBottom_toTopOf="@id/text_holder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/review_title" />
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/text_holder"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toTopOf="@id/read_more_button"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/multimedia">
+
+            <TextView
+                android:id="@+id/headline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textSize="16sp"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toTopOf="@id/byline"
+                tool:text="Review: In ‘Burning,’ Love Ignites a Divided World" />
+
+            <TextView
+                android:id="@+id/byline"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toTopOf="@id/divider"
+                app:layout_constraintTop_toBottomOf="@+id/headline"
+                android:layout_marginStart="8dp"
+                android:textSize="12sp"
+                tool:text="MANOHLA DARGIS" />
+
+            <View
+                android:id="@+id/divider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintBottom_toTopOf="@id/summary_short"
+                app:layout_constraintTop_toBottomOf="@+id/byline"
+                android:layout_marginTop="8dp"
+                android:background="@color/colorPrimaryDark"/>
+
+            <TextView
+                android:id="@+id/summary_short"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                tool:text="The great South Korean director Lee Chang-dong’s latest involves three characters subsumed by desire and rage."
+                app:layout_constraintTop_toBottomOf="@+id/divider" />
+        </android.support.constraint.ConstraintLayout>
+
+
+        <android.support.design.button.MaterialButton
+            android:id="@+id/read_more_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_holder"
+            app:layout_constraintLeft_toRightOf="@id/publication_date"
+            android:text="@string/button_read_more"/>
+
+        <TextView
+            android:id="@+id/publication_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="18dp"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintRight_toLeftOf="@id/read_more_button"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/text_holder"
+            tool:text="2018-10-25" />
+    </android.support.constraint.ConstraintLayout>
+
+
+</android.support.v7.widget.CardView>
