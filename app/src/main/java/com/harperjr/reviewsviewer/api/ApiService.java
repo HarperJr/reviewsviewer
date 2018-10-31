@@ -15,7 +15,7 @@ public interface ApiService {
      * @return
      */
     @GET("reviews/all.json")
-    Call<Result> getReviews(
+    Observable<Result> getReviews(
             @Query("offset") final int offset,
             @Query("api-key") final String apiKey
     );
@@ -29,7 +29,7 @@ public interface ApiService {
      * @return
      */
     @GET("reviews/search.json")
-    Call<Result> searchReviews(
+    Observable<Result> searchReviews(
             @Query("offset") final int offset,
             @Query("query") final String query,
             @Query("api-key") final String apiKey
