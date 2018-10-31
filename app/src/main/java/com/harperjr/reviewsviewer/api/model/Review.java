@@ -1,5 +1,5 @@
 
-package com.harperjr.reviewsviewer.api.nyt;
+package com.harperjr.reviewsviewer.api.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -11,7 +11,7 @@ public class Review {
     private String displayTitle;
     @SerializedName("mpaa_rating")
     @Expose
-    private String mpaaRating;
+    private String rating;
     @SerializedName("critics_pick")
     @Expose
     private Integer criticsPick;
@@ -48,12 +48,12 @@ public class Review {
         this.displayTitle = displayTitle;
     }
 
-    public String getMpaaRating() {
-        return mpaaRating;
+    public String getRating() {
+        return rating;
     }
 
-    public void setMpaaRating(String mpaaRating) {
-        this.mpaaRating = mpaaRating;
+    public void setRating(String rating) {
+        this.rating = rating;
     }
 
     public Integer getCriticsPick() {

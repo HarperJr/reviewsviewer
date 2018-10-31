@@ -1,9 +1,12 @@
-package com.harperjr.reviewsviewer.ui.fragments;
+package com.harperjr.reviewsviewer.ui.reviews.fragment;
 
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.WebResourceRequest;
@@ -11,13 +14,13 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 import com.harperjr.reviewsviewer.R;
+import com.harperjr.reviewsviewer.model.MovieReview;
 
 public class DetailedReviewFragment extends Fragment {
 
     private WebView webView;
 
     public DetailedReviewFragment() {
-
     }
 
 
@@ -42,7 +45,12 @@ public class DetailedReviewFragment extends Fragment {
         });
     }
 
-    public void loadUrl(final String url) {
-        webView.loadUrl(url);
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        return super.onOptionsItemSelected(item);
+    }
+
+    public void load(final MovieReview review) {
+        this.webView.loadUrl(review.getLinkUri());
     }
 }

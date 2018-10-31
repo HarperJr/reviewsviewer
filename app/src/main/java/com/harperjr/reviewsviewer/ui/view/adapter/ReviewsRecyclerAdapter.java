@@ -1,4 +1,4 @@
-package com.harperjr.reviewsviewer.ui.adapters;
+package com.harperjr.reviewsviewer.ui.view.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -63,44 +63,36 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private final View view;
 
         private final TextView title;
         private final TextView headLine;
         private final TextView byLine;
         private final TextView summaryShort;
-
         private final TextView publicationDate;
-
         private final MaterialButton readMoreButton;
-
         private ImageView imageView;
         private String imageUri;
 
         private ViewHolder(@NonNull View itemView) {
             super(itemView);
-            this.view = itemView;
-            final ConstraintLayout contentHolder = itemView.findViewById(R.id.content_holder);
 
+            final ConstraintLayout contentHolder = itemView.findViewById(R.id.content_holder);
+            final ConstraintLayout textHolder = contentHolder.findViewById(R.id.text_holder);
             this.title = contentHolder.findViewById(R.id.review_title);
             this.imageView = contentHolder.findViewById(R.id.multimedia);
             this.readMoreButton = contentHolder.findViewById(R.id.read_more_button);
-
-            final ConstraintLayout textHolder = contentHolder.findViewById(R.id.text_holder);
-
             this.headLine = textHolder.findViewById(R.id.headline);
             this.byLine = textHolder.findViewById(R.id.byline);
             this.summaryShort = textHolder.findViewById(R.id.summary_short);
-
-            this.publicationDate = view.findViewById(R.id.publication_date);
+            this.publicationDate = itemView.findViewById(R.id.publication_date);
         }
 
         private void bind(final MovieReview review) {
+
             this.title.setText(review.getTitle());
             this.headLine.setText(review.getHeadLine());
             this.byLine.setText(review.getByLine());
             this.summaryShort.setText(review.getSummaryShort());
-
             this.publicationDate.setText(review.getPublicationDate());
             this.imageUri = review.getMultimediaUri();
 
@@ -113,7 +105,7 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
 
             if (ReviewsRecyclerAdapter.this.interactionListener != null) {
                 readMoreButton.setOnClickListener(view ->
-                    ReviewsRecyclerAdapter.this.interactionListener.onReadMoreButtonClicked(review));
+                        ReviewsRecyclerAdapter.this.interactionListener.onReadMoreButtonClicked(review));
             }
         }
 

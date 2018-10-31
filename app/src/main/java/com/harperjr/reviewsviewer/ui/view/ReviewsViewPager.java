@@ -1,6 +1,5 @@
-package com.harperjr.reviewsviewer.ui.views;
+package com.harperjr.reviewsviewer.ui.view;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -13,7 +12,7 @@ public class ReviewsViewPager extends ViewPager {
     private boolean scrollable;
 
     public ReviewsViewPager(@NonNull Context context) {
-        super(context);
+        this(context, null);
     }
 
     public ReviewsViewPager(@NonNull Context context, @Nullable AttributeSet attrs) {

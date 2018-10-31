@@ -4,17 +4,17 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".ui.fragments.ReviewsFragment">
+    tools:context=".ui.reviews.fragment.ReviewsFragment">
     <android.support.v4.widget.SwipeRefreshLayout
         android:id="@+id/swipe_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-        <com.harperjr.reviewsviewer.ui.views.ReviewsRecyclerView
+        <com.harperjr.reviewsviewer.ui.view.ReviewsRecyclerView
             android:id="@+id/reviews_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:scrollbars="vertical"
             app:layoutManager="android.support.v7.widget.LinearLayoutManager">
-        </com.harperjr.reviewsviewer.ui.views.ReviewsRecyclerView>
+        </com.harperjr.reviewsviewer.ui.view.ReviewsRecyclerView>
     </android.support.v4.widget.SwipeRefreshLayout>
 </FrameLayout>

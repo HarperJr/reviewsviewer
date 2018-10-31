@@ -1,4 +1,4 @@
-package com.harperjr.reviewsviewer.ui.fragments;
+package com.harperjr.reviewsviewer.ui.reviews.fragment;
 
 
 import android.os.Bundle;

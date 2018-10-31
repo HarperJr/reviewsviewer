@@ -1,4 +1,4 @@
-package com.harperjr.reviewsviewer.ui.views;
+package com.harperjr.reviewsviewer.ui.view;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -13,7 +13,6 @@ public class ReviewsRecyclerView extends RecyclerView {
     }
 
     private static final int LEAST_TILL_LOAD = 3;
-
     private boolean isLoading;
     private OnScrolledListener onScrolledListener;
 
@@ -26,11 +25,11 @@ public class ReviewsRecyclerView extends RecyclerView {
     }
 
     public ReviewsRecyclerView(@NonNull Context context) {
-        super(context);
+        this(context, null);
     }
 
     public ReviewsRecyclerView(@NonNull Context context, @NonNull AttributeSet attributeSet) {
-        super(context, attributeSet);
+        this(context, attributeSet, 0);
     }
 
     public ReviewsRecyclerView(@NonNull Context context, @NonNull AttributeSet attributeSet, int style) {
@@ -47,7 +46,6 @@ public class ReviewsRecyclerView extends RecyclerView {
         super.onScrolled(dx, dy);
 
         final LinearLayoutManager layoutManager = (LinearLayoutManager) this.getLayoutManager();
-
         final int visibleCount = layoutManager.getChildCount();
         final int totalCount = layoutManager.getItemCount();
         final int firstVisibleItemPos = layoutManager.findFirstVisibleItemPosition();

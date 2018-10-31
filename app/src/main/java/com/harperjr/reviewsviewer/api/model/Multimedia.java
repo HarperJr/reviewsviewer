@@ -1,5 +1,5 @@
 
-package com.harperjr.reviewsviewer.api.nyt;
+package com.harperjr.reviewsviewer.api.model;
 
 
 import com.google.gson.annotations.Expose;
@@ -12,7 +12,7 @@ public class Multimedia {
     private String type;
     @SerializedName("src")
     @Expose
-    private String src;
+    private String source;
     @SerializedName("width")
     @Expose
     private Integer width;
@@ -28,12 +28,12 @@ public class Multimedia {
         this.type = type;
     }
 
-    public String getSrc() {
-        return src;
+    public String getSource() {
+        return source;
     }
 
-    public void setSrc(String src) {
-        this.src = src;
+    public void setSource(String source) {
+        this.source = source;
     }
 
     public Integer getWidth() {

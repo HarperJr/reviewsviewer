@@ -11,21 +11,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class App extends Application {
 
-    private static final String NYT_REVIEWS_URL = "https://api.nytimes.com/svc/movies/v2/";
-    private static ApiService apiService;
+    private static AppComponent daggerAppComponent;
 
     @Override
     public void onCreate() {
         super.onCreate();
-
-        final Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(NYT_REVIEWS_URL)
-                .addConverterFactory(GsonConverterFactory.create())
-                .build();
-        apiService = retrofit.create(ApiService.class);
+        daggerAppComponent = DaggerAppComponent.builder().build();
     }
 
-    public static ApiService getApiService() {
-        return apiService;
+    public static AppComponent getDaggerAppComponent() {
+        return daggerAppComponent;
     }
 }

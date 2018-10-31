@@ -1,5 +1,5 @@
 
-package com.harperjr.reviewsviewer.api.nyt;
+package com.harperjr.reviewsviewer.api.model;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,4 +1,4 @@
-package com.harperjr.reviewsviewer.mvp;
+package com.harperjr.reviewsviewer.ui.reviews.mvp;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -7,12 +7,14 @@ import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
 import com.harperjr.reviewsviewer.api.ApiService;
 import com.harperjr.reviewsviewer.App;
-import com.harperjr.reviewsviewer.api.nyt.Result;
+import com.harperjr.reviewsviewer.api.model.Result;
 import com.harperjr.reviewsviewer.model.MovieReview;
 import com.harperjr.reviewsviewer.model.mapper.ReviewMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.inject.Inject;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -23,7 +25,8 @@ public class ReviewsPresenter extends MvpPresenter<ReviewsView> {
     private static final int REVIEWS_PACKAGE_SIZE = 20;
     private static final String API_KEY = "64ebfa0fdec6427887d26a483ff8c286";
 
-    private final ApiService apiService;
+    @Inject
+    ApiService apiService;
 
     private final List<MovieReview> reviews = new ArrayList<>();
     private final List<MovieReview> searchedReviews = new ArrayList<>();
@@ -31,7 +34,7 @@ public class ReviewsPresenter extends MvpPresenter<ReviewsView> {
     private String searchingQuery;
 
     public ReviewsPresenter() {
-        apiService = App.getApiService();
+        App.getDaggerAppComponent().inject(this);
     }
 
     @Override

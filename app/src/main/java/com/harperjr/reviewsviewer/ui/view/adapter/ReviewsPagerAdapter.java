@@ -1,14 +1,16 @@
-package com.harperjr.reviewsviewer.ui.adapters;
+package com.harperjr.reviewsviewer.ui.view.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import com.harperjr.reviewsviewer.ui.fragments.DetailedReviewFragment;
-import com.harperjr.reviewsviewer.ui.fragments.ReviewsFragment;
+import com.harperjr.reviewsviewer.ui.reviews.fragment.DetailedReviewFragment;
+import com.harperjr.reviewsviewer.ui.reviews.fragment.ReviewsFragment;
 
 public class ReviewsPagerAdapter extends FragmentPagerAdapter {
-    private static final int PAGES_COUNT = 2;
 
+    public static final int REVIEWS_PAGE = 0;
+    public static final int DETAILED_REVIEW_PAGE = 1;
+    private static final int PAGES_COUNT = 2;
     private ReviewsFragment reviewsFragment;
     private DetailedReviewFragment detailedReviewFragment;
 
@@ -31,6 +33,6 @@ public class ReviewsPagerAdapter extends FragmentPagerAdapter {
 
     @Override
     public Fragment getItem(int i) {
-        return i == 0 ? reviewsFragment : detailedReviewFragment;
+        return i == REVIEWS_PAGE ? reviewsFragment : detailedReviewFragment;
     }
 }

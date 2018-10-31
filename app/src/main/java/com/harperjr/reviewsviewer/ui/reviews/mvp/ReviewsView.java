@@ -1,9 +1,8 @@
-package com.harperjr.reviewsviewer.mvp;
+package com.harperjr.reviewsviewer.ui.reviews.mvp;
 
 import android.support.annotation.NonNull;
 
 import com.arellomobile.mvp.MvpView;
-import com.harperjr.reviewsviewer.api.nyt.Review;
 import com.harperjr.reviewsviewer.model.MovieReview;
 
 import java.util.List;

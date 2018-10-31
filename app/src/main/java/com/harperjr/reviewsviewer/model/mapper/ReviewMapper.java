@@ -1,6 +1,6 @@
 package com.harperjr.reviewsviewer.model.mapper;
 
-import com.harperjr.reviewsviewer.api.nyt.Review;
+import com.harperjr.reviewsviewer.api.model.Review;
 import com.harperjr.reviewsviewer.model.MovieReview;
 
 import java.util.ArrayList;
@@ -16,7 +16,7 @@ public class ReviewMapper {
         movieReview.setSummaryShort(review.getSummaryShort());
         movieReview.setPublicationDate(review.getPublicationDate());
 
-        final String multimediaUrl = review.getMultimedia() != null ? review.getMultimedia().getSrc() : null;
+        final String multimediaUrl = review.getMultimedia() != null ? review.getMultimedia().getSource() : null;
         movieReview.setMultimediaUri(multimediaUrl);
 
         movieReview.setLinkUri(review.getLink().getUrl());

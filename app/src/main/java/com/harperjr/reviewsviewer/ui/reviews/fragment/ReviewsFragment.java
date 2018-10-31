@@ -1,4 +1,4 @@
-package com.harperjr.reviewsviewer.ui.fragments;
+package com.harperjr.reviewsviewer.ui.reviews.fragment;
 
 
 import android.os.Bundle;
@@ -13,26 +13,24 @@ import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.PresenterType;
 import com.harperjr.reviewsviewer.R;
-import com.harperjr.reviewsviewer.mvp.ReviewsPresenter;
-import com.harperjr.reviewsviewer.mvp.ReviewsView;
+import com.harperjr.reviewsviewer.ui.reviews.mvp.ReviewsPresenter;
+import com.harperjr.reviewsviewer.ui.reviews.mvp.ReviewsView;
 import com.harperjr.reviewsviewer.model.MovieReview;
-import com.harperjr.reviewsviewer.ui.adapters.ReviewsRecyclerAdapter;
-import com.harperjr.reviewsviewer.ui.views.ReviewsRecyclerView;
+import com.harperjr.reviewsviewer.ui.view.adapter.ReviewsRecyclerAdapter;
+import com.harperjr.reviewsviewer.ui.view.ReviewsRecyclerView;
 
 import java.util.List;
 
 
 public class ReviewsFragment extends MvpAppCompatFragment implements ReviewsView, ActivityEventListener {
 
-    @InjectPresenter(type = PresenterType.GLOBAL)
-    public ReviewsPresenter reviewsPresenter;
-
     private SwipeRefreshLayout swipeRefreshLayout;
-
     private ReviewsRecyclerView reviewsRecyclerView;
     private ReviewsRecyclerAdapter reviewsRecyclerAdapter;
-
     private ReviewsRecyclerAdapter.InteractionListener interactionListener;
+
+    @InjectPresenter(type = PresenterType.GLOBAL)
+    public ReviewsPresenter reviewsPresenter;
 
     public ReviewsFragment() {
     }
@@ -45,22 +43,17 @@ public class ReviewsFragment extends MvpAppCompatFragment implements ReviewsView
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_reviews, container, false);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        final View fragmentView = inflater.inflate(R.layout.fragment_reviews, container, false);
 
         reviewsRecyclerAdapter = new ReviewsRecyclerAdapter();
         reviewsRecyclerAdapter.setInteractionListener(this.interactionListener);
-
-        this.swipeRefreshLayout = view.findViewById(R.id.swipe_layout);
+        this.swipeRefreshLayout = fragmentView.findViewById(R.id.swipe_layout);
         this.swipeRefreshLayout.setOnRefreshListener(() -> reviewsPresenter.refreshReviews());
-
-        this.reviewsRecyclerView = view.findViewById(R.id.reviews_recycler);
+        this.reviewsRecyclerView = fragmentView.findViewById(R.id.reviews_recycler);
         this.reviewsRecyclerView.setAdapter(reviewsRecyclerAdapter);
         this.reviewsRecyclerView.setOnScrolledListener(() -> reviewsPresenter.loadReviews());
+
+        return fragmentView;
     }
 
     @Override
