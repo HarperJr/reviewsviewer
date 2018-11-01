@@ -1,15 +1,14 @@
 package com.harperjr.reviewsviewer.ui.reviews.mvp;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.arellomobile.mvp.InjectViewState;
 import com.arellomobile.mvp.MvpPresenter;
-import com.harperjr.reviewsviewer.api.ApiService;
 import com.harperjr.reviewsviewer.App;
-import com.harperjr.reviewsviewer.api.model.Result;
+import com.harperjr.reviewsviewer.api.ApiService;
+import com.harperjr.reviewsviewer.interactor.ReviewsLoader;
 import com.harperjr.reviewsviewer.model.MovieReview;
-import com.harperjr.reviewsviewer.model.mapper.ReviewMapper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,32 +19,24 @@ import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.disposables.Disposables;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import rx.Subscription;
 
 @InjectViewState
 public class ReviewsPresenter extends MvpPresenter<ReviewsView> {
     private static final int REVIEWS_PACKAGE_SIZE = 20;
-    private static final String API_KEY = "64ebfa0fdec6427887d26a483ff8c286";
 
-    private Disposable receiveReviewsDisposable;
-    private Disposable searchReviewsDisposable;
+    private final List<MovieReview> movieReviews = new ArrayList<>();
+    private final List<MovieReview> searchedMovieReviews = new ArrayList<>();
 
-    @Inject
-    ApiService apiService;
-
-    private final ReviewMapper reviewMapper = new ReviewMapper();
-    private final List<MovieReview> reviews = new ArrayList<>();
-    private final List<MovieReview> searchedReviews = new ArrayList<>();
+    private Disposable loadingDisposable = Disposables.disposed();
+    private Disposable searchingDisposable = Disposables.disposed();
 
     private String searchingQuery;
 
+    @Inject
+    ReviewsLoader reviewsLoader = App.getDaggerAppComponent().getReviewLoader();
+
     public ReviewsPresenter() {
         App.getDaggerAppComponent().inject(this);
-        this.receiveReviewsDisposable = Disposables.disposed();
-        this.searchReviewsDisposable = Disposables.disposed();
     }
 
     @Override
@@ -57,49 +48,50 @@ public class ReviewsPresenter extends MvpPresenter<ReviewsView> {
     public void loadReviews() {
         final ReviewsView viewState = getViewState();
         if (searchingQuery == null) {
-            if (!searchedReviews.isEmpty()) {
-                searchedReviews.clear();
+            if (!searchedMovieReviews.isEmpty()) {
+                searchedMovieReviews.clear();
                 viewState.clearReviews();
-                if (!reviews.isEmpty()) {
-                    viewState.addReviews(reviews);
+                if (!movieReviews.isEmpty()) {
+                    viewState.addReviews(movieReviews);
                     return;
                 }
             }
-            if (reviews.size() % REVIEWS_PACKAGE_SIZE != 0) {
+            if (movieReviews.size() % REVIEWS_PACKAGE_SIZE != 0) {
                 return;
             }
-
-            receiveReviewsDisposable = apiService.getReviews(reviews.size(), API_KEY)
-                    .map(result -> reviewMapper.mapList(result.getReviews()))
-                    .subscribeOn(Schedulers.newThread())
+            getViewState().setLoading(true);
+            loadingDisposable = reviewsLoader
+                    .getReviewsByOffset(movieReviews.size())
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe(disposable -> getViewState().setLoading(true))
                     .subscribe(result -> {
+                        getViewState().addReviews(result.getMovieReviews());
+                        getViewState().setLoading(false);
+                    }, throwable -> Log.e("Retrofit", throwable.getMessage()));
 
-                    }, throwable -> {
-
-                    });
         } else {
-            if (searchedReviews.size() % REVIEWS_PACKAGE_SIZE != 0) {
+            if (searchedMovieReviews.size() % REVIEWS_PACKAGE_SIZE != 0) {
                 return;
             }
             viewState.setLoading(true);
-            searchReviewsDisposable = apiService.searchReviews(searchedReviews.size(), searchingQuery, API_KEY)
-                    .map(result -> reviewMapper.mapList(result.getReviews()))
-                    .subscribeOn(Schedulers.newThread())
+            searchingDisposable = reviewsLoader
+                    .searchReviewsByOffset(searchedMovieReviews.size(), searchingQuery)
+                    .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe(disposable -> getViewState().setLoading(true))
                     .subscribe(result -> {
-
-                    }, throwable -> {
-
-                    });
+                        getViewState().addReviews(result.getMovieReviews());
+                        getViewState().setLoading(false);
+                    }, throwable -> Log.e("Retrofit", throwable.getMessage()));
         }
     }
 
     public void refreshReviews() {
         final ReviewsView viewState = getViewState();
 
-        reviews.clear();
-        searchedReviews.clear();
+        movieReviews.clear();
+        searchedMovieReviews.clear();
 
         viewState.clearReviews();
         loadReviews();
@@ -109,38 +101,4 @@ public class ReviewsPresenter extends MvpPresenter<ReviewsView> {
         this.searchingQuery = searchingQuery;
     }
 
-    private final Callback<Result> getReviewsCallback = new Callback<Result>() {
-        @Override
-        public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
-            final ReviewsView viewState = getViewState();
-            final List<MovieReview> incomingReviews = new ReviewMapper().mapList(response.body().getReviews());
-
-            reviews.addAll(incomingReviews);
-
-            viewState.addReviews(incomingReviews);
-            viewState.setLoading(false);
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-            getViewState().setLoading(false);
-        }
-    };
-
-    private final Callback<Result> searchReviewsCallback = new Callback<Result>() {
-        @Override
-        public void onResponse(@NonNull Call<Result> call, @NonNull Response<Result> response) {
-            final ReviewsView viewState = getViewState();
-            final List<MovieReview> incomingReviews = new ReviewMapper().mapList(response.body().getReviews());
-            searchedReviews.addAll(incomingReviews);
-
-            viewState.addReviews(incomingReviews);
-            viewState.setLoading(false);
-        }
-
-        @Override
-        public void onFailure(@NonNull Call<Result> call, @NonNull Throwable t) {
-            getViewState().setLoading(false);
-        }
-    };
 }

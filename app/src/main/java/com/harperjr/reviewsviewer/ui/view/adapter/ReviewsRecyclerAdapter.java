@@ -22,10 +22,10 @@ import java.util.List;
 public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecyclerAdapter.ViewHolder> {
 
     public interface InteractionListener {
-        void onReadMoreButtonClicked(@NonNull final MovieReview review);
+        void onReadMoreButtonClicked(@NonNull final MovieReview movieReview);
     }
 
-    private List<MovieReview> reviews = new ArrayList<>();
+    private List<MovieReview> movieReviews = new ArrayList<>();
     private InteractionListener interactionListener;
 
     public void setInteractionListener(InteractionListener interactionListener) {
@@ -42,22 +42,22 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, int i) {
-        viewHolder.bind(reviews.get(i));
+        viewHolder.bind(movieReviews.get(i));
     }
 
     @Override
     public int getItemCount() {
-        return reviews.size();
+        return movieReviews.size();
     }
 
     public void clearReviews() {
-        this.reviews.clear();
+        this.movieReviews.clear();
         this.notifyDataSetChanged();
     }
 
-    public void addReviews(@NonNull List<MovieReview> reviews) {
-        if (this.reviews != null) {
-            this.reviews.addAll(reviews);
+    public void addReviews(@NonNull List<MovieReview> movieReviews) {
+        if (this.movieReviews != null) {
+            this.movieReviews.addAll(movieReviews);
         }
         this.notifyDataSetChanged();
     }
@@ -87,14 +87,14 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
             this.publicationDate = itemView.findViewById(R.id.publication_date);
         }
 
-        private void bind(final MovieReview review) {
+        private void bind(final MovieReview movieReview) {
 
-            this.title.setText(review.getTitle());
-            this.headLine.setText(review.getHeadLine());
-            this.byLine.setText(review.getByLine());
-            this.summaryShort.setText(review.getSummaryShort());
-            this.publicationDate.setText(review.getPublicationDate());
-            this.imageUri = review.getMultimediaUri();
+            this.title.setText(movieReview.getDisplayTitle());
+            this.headLine.setText(movieReview.getHeadline());
+            this.byLine.setText(movieReview.getByline());
+            this.summaryShort.setText(movieReview.getSummaryShort());
+            this.publicationDate.setText(movieReview.getPublicationDate());
+            this.imageUri = movieReview.getMultimediaUri();
 
             if (imageView.getMeasuredWidth() == 0) {
                 imageView.getViewTreeObserver().removeOnGlobalLayoutListener(onGlobalLayoutListener);
@@ -105,7 +105,7 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
 
             if (ReviewsRecyclerAdapter.this.interactionListener != null) {
                 readMoreButton.setOnClickListener(view ->
-                        ReviewsRecyclerAdapter.this.interactionListener.onReadMoreButtonClicked(review));
+                        ReviewsRecyclerAdapter.this.interactionListener.onReadMoreButtonClicked(movieReview));
             }
         }
 

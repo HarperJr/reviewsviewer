@@ -8,7 +8,7 @@ import com.harperjr.reviewsviewer.model.MovieReview;
 import java.util.List;
 
 public interface ReviewsView extends MvpView {
-    void addReviews(@NonNull final List<MovieReview> reviews);
+    void addReviews(@NonNull final List<MovieReview> movieReviews);
     void clearReviews();
     void setLoading(boolean loading);
 }

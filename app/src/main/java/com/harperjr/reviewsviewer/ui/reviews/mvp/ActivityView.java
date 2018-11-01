@@ -6,5 +6,5 @@ import com.arellomobile.mvp.MvpView;
 import com.harperjr.reviewsviewer.model.MovieReview;
 
 public interface ActivityView extends MvpView {
-    void navigateToDetailed(@NonNull final MovieReview review);
+    void navigateToDetailed(@NonNull final MovieReview movieReview);
 }

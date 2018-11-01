@@ -3,19 +3,17 @@ package com.harperjr.reviewsviewer.ui.reviews.fragment;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.arellomobile.mvp.MvpAppCompatFragment;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.PresenterType;
 import com.harperjr.reviewsviewer.R;
+import com.harperjr.reviewsviewer.model.MovieReview;
 import com.harperjr.reviewsviewer.ui.reviews.mvp.ReviewsPresenter;
 import com.harperjr.reviewsviewer.ui.reviews.mvp.ReviewsView;
-import com.harperjr.reviewsviewer.model.MovieReview;
 import com.harperjr.reviewsviewer.ui.view.adapter.ReviewsRecyclerAdapter;
 import com.harperjr.reviewsviewer.ui.view.ReviewsRecyclerView;
 
@@ -63,8 +61,8 @@ public class ReviewsFragment extends MvpAppCompatFragment implements ReviewsView
     }
 
     @Override
-    public void addReviews(@NonNull List<MovieReview> reviews) {
-        this.reviewsRecyclerAdapter.addReviews(reviews);
+    public void addReviews(@NonNull List<MovieReview> movieReviews) {
+        this.reviewsRecyclerAdapter.addReviews(movieReviews);
     }
 
     @Override

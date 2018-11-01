@@ -23,7 +23,7 @@ public interface ApiService {
     /**
      * set for getting results from determined item in result
      * @param offset
-     * searching query, request works the way as getReviews do if null
+     * searching query, request works the way as getMovieReviews do if null
      * @param query
      * @param apiKey
      * @return

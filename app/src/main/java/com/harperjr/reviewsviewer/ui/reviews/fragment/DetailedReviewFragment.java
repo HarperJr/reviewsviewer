@@ -3,8 +3,6 @@ package com.harperjr.reviewsviewer.ui.reviews.fragment;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -50,7 +48,7 @@ public class DetailedReviewFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    public void load(final MovieReview review) {
-        this.webView.loadUrl(review.getLinkUri());
+    public void load(final MovieReview movieReview) {
+        this.webView.loadUrl(movieReview.getLinkUri());
     }
 }

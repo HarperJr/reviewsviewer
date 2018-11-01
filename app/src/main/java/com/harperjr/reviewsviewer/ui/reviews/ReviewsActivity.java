@@ -3,19 +3,23 @@ package com.harperjr.reviewsviewer.ui.reviews;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.FrameLayout;
 
 import com.arellomobile.mvp.MvpAppCompatActivity;
 import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.PresenterType;
 import com.harperjr.reviewsviewer.R;
+import com.harperjr.reviewsviewer.model.MovieReview;
+import com.harperjr.reviewsviewer.ui.reviews.fragment.FavoritesFragment;
 import com.harperjr.reviewsviewer.ui.reviews.mvp.ActivityPresenter;
 import com.harperjr.reviewsviewer.ui.reviews.mvp.ActivityView;
-import com.harperjr.reviewsviewer.model.MovieReview;
 import com.harperjr.reviewsviewer.ui.view.adapter.ReviewsPagerAdapter;
 import com.harperjr.reviewsviewer.ui.reviews.fragment.ActivityEventListener;
 import com.harperjr.reviewsviewer.ui.reviews.fragment.DetailedReviewFragment;
@@ -27,8 +31,11 @@ public class ReviewsActivity extends MvpAppCompatActivity implements ActivityVie
     private ReviewsFragment reviewsFragment;
     private DetailedReviewFragment detailedReviewFragment;
 
+    private FrameLayout mainHolder;
+
     private Toolbar toolbar;
     private MenuItem searchItem;
+    private MenuItem likeItem;
 
     private ReviewsViewPager viewPager;
 
@@ -50,7 +57,9 @@ public class ReviewsActivity extends MvpAppCompatActivity implements ActivityVie
         this.reviewsPagerAdapter.setReviewsFragment(reviewsFragment);
         this.reviewsPagerAdapter.setDetailedReviewFragment(detailedReviewFragment);
         this.toolbar = findViewById(R.id.tool_bar);
-        this.viewPager = findViewById(R.id.pager);
+        this.mainHolder = findViewById(R.id.main_holder);
+
+        this.viewPager = mainHolder.findViewById(R.id.pager);
         this.viewPager.setAdapter(reviewsPagerAdapter);
         this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -88,6 +97,8 @@ public class ReviewsActivity extends MvpAppCompatActivity implements ActivityVie
 
         getMenuInflater().inflate(R.menu.tool_bar_menu, menu);
         searchItem =  toolbar.getMenu().findItem(R.id.search);
+        likeItem = toolbar.getMenu().findItem(R.id.like);
+
         final SearchView searchView = (SearchView) searchItem.getActionView();
         final ActivityEventListener activityEventListener = reviewsFragment;
 
@@ -130,14 +141,23 @@ public class ReviewsActivity extends MvpAppCompatActivity implements ActivityVie
             }
         });
 
+        likeItem.setOnMenuItemClickListener(v -> {
+
+            final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+            fragmentTransaction.replace(R.id.main_holder, new FavoritesFragment());
+            fragmentTransaction.commit();
+
+            return true;
+        });
+
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public void navigateToDetailed(@NonNull final MovieReview review) {
+    public void navigateToDetailed(@NonNull final MovieReview movieReview) {
         try {
-            this.detailedReviewFragment.load(review);
-            this.toolbar.setTitle(review.getTitle());
+            this.detailedReviewFragment.load(movieReview);
+            this.toolbar.setTitle(movieReview.getDisplayTitle());
 
             this.searchItem.setVisible(false);
             this.searchItem.collapseActionView();

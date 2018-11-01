@@ -6,7 +6,7 @@ import com.harperjr.reviewsviewer.model.MovieReview;
 
 @InjectViewState
 public class ActivityPresenter extends MvpPresenter<ActivityView> {
-    public void navigateToDetailed(final MovieReview review) {
-        getViewState().navigateToDetailed(review);
+    public void navigateToDetailed(final MovieReview movieReview) {
+        getViewState().navigateToDetailed(movieReview);
     }
 }

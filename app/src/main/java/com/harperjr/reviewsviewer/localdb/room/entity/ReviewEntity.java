@@ -1,39 +1,28 @@
-package com.harperjr.reviewsviewer.model;
+package com.harperjr.reviewsviewer.localdb.room.entity;
 
-import com.harperjr.reviewsviewer.model.base.ModelWithId;
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.PrimaryKey;
 
-public class MovieReview implements ModelWithId<Long> {
-    /**
-     * Id записи
-     */
+import com.harperjr.reviewsviewer.localdb.room.entity.base.EntityWithId;
+
+@Entity(tableName = "Review")
+public class ReviewEntity implements EntityWithId<Long> {
+
+    @PrimaryKey
     private long id;
-    /**
-     * Тайтл ревьюшки
-     */
+
     private String displayTitle;
-    /**
-     *
-     */
-    private String headline;
-    /**
-     *
-     */
-    private String byline;
-    /**
-     *
-     */
+
+    private String headLine;
+
+    private String byLine;
+
     private String summaryShort;
-    /**
-     *
-     */
+
     private String publicationDate;
-    /**
-     *
-     */
+
     private String linkUri;
-    /**
-     *
-     */
+
     private String multimediaUri;
 
     @Override
@@ -54,20 +43,20 @@ public class MovieReview implements ModelWithId<Long> {
         this.displayTitle = displayTitle;
     }
 
-    public String getByline() {
-        return byline;
+    public String getHeadLine() {
+        return headLine;
     }
 
-    public void setByline(String byline) {
-        this.byline = byline;
+    public void setHeadLine(String headLine) {
+        this.headLine = headLine;
     }
 
-    public String getHeadline() {
-        return headline;
+    public String getByLine() {
+        return byLine;
     }
 
-    public void setHeadline(String headline) {
-        this.headline = headline;
+    public void setByLine(String byLine) {
+        this.byLine = byLine;
     }
 
     public String getSummaryShort() {
