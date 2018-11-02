@@ -23,6 +23,7 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
 
     public interface InteractionListener {
         void onReadMoreButtonClicked(@NonNull final MovieReview movieReview);
+        void onAddToFavoritesButtonClicked(@NonNull final MovieReview movieReview);
     }
 
     private List<MovieReview> movieReviews = new ArrayList<>();
@@ -70,6 +71,7 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
         private final TextView summaryShort;
         private final TextView publicationDate;
         private final MaterialButton readMoreButton;
+        private final MaterialButton addToFavoritesButton;
         private ImageView imageView;
         private String imageUri;
 
@@ -81,6 +83,7 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
             this.title = contentHolder.findViewById(R.id.review_title);
             this.imageView = contentHolder.findViewById(R.id.multimedia);
             this.readMoreButton = contentHolder.findViewById(R.id.read_more_button);
+            this.addToFavoritesButton = contentHolder.findViewById(R.id.favorites_button);
             this.headLine = textHolder.findViewById(R.id.headline);
             this.byLine = textHolder.findViewById(R.id.byline);
             this.summaryShort = textHolder.findViewById(R.id.summary_short);
@@ -106,6 +109,8 @@ public class ReviewsRecyclerAdapter extends RecyclerView.Adapter<ReviewsRecycler
             if (ReviewsRecyclerAdapter.this.interactionListener != null) {
                 readMoreButton.setOnClickListener(view ->
                         ReviewsRecyclerAdapter.this.interactionListener.onReadMoreButtonClicked(movieReview));
+                addToFavoritesButton.setOnClickListener(view ->
+                        ReviewsRecyclerAdapter.this.interactionListener.onAddToFavoritesButtonClicked(movieReview));
             }
         }
 

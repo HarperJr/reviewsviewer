@@ -20,6 +20,12 @@ public interface ReviewDao extends BaseDao<ReviewEntity> {
     @Query("SELECT * FROM Review WHERE multimediaUri = :multimediaUri")
     ReviewEntity getReviewByMultimediaUri(String multimediaUri);
 
+    @Query("SELECT * FROM Review WHERE displayTitle = :title")
+    ReviewEntity getReviewByTitle(String title);
+
+    @Query("SELECT * FROM Review")
+    List<ReviewEntity> getReviews();
+
     @Query("SELECT * FROM Review WHERE displayTitle LIKE :displayTitle")
     List<ReviewEntity> getReviewsMatchDisplayTitle(String displayTitle);
 }

@@ -24,7 +24,7 @@ public class ReviewRepositoryImpl extends BaseRepositoryImpl<MovieReview, Review
     }
 
     @Override
-    protected BaseMapper baseMapper() {
+    protected BaseMapper<MovieReview, ReviewEntity> baseMapper() {
         return reviewMapper;
     }
 
@@ -36,25 +36,25 @@ public class ReviewRepositoryImpl extends BaseRepositoryImpl<MovieReview, Review
     @Nullable
     @Override
     public MovieReview getById(long id) {
-        return reviewMapper.entityToModel(dao().getById(id));
+        return baseMapper().entityToModel(dao().getById(id));
     }
 
     @Nullable
     @Override
     public MovieReview getByTitle(String title) {
-        return null;
+        return baseMapper().entityToModel(dao().getReviewByTitle(title));
     }
 
     @NonNull
     @Override
     public List<MovieReview> getMatchTitle(String title) {
-        return null;
+        return baseMapper().entityListToModelList(dao().getReviewsMatchDisplayTitle(title));
     }
 
     @NonNull
     @Override
     public List<MovieReview> getReviews() {
-        return null;
+        return baseMapper().entityListToModelList(dao().getReviews());
     }
 
     @Override

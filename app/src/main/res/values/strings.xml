@@ -7,4 +7,5 @@
     <string name="action_search">Search movieReviews</string>
     <string name="action_like">Like</string>
     <string name="like_button">Like</string>
+    <string name="notice_text">You had not added anything</string>
 </resources>

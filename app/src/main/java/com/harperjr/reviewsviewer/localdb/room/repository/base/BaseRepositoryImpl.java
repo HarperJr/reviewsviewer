@@ -25,21 +25,21 @@ public abstract class BaseRepositoryImpl<Model extends ModelWithId, Entity exten
 
     @Override
     public void insert(@NonNull Model model) {
-
+        dao().insert(baseMapper().modelToEntity(model));
     }
 
     @Override
     public void insert(@NonNull List<Model> models) {
-
+        dao().insert(baseMapper().modelListToEntityList(models));
     }
 
     @Override
     public void update(@NonNull Model model) {
-
+        dao().update(baseMapper().modelToEntity(model));
     }
 
     @Override
     public void delete(@NonNull Model model) {
-
+        dao().delete(baseMapper().modelToEntity(model));
     }
 }

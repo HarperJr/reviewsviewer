@@ -3,7 +3,7 @@ package com.harperjr.reviewsviewer.ui.reviews;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.NonNull;
-import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.SearchView;
@@ -17,29 +17,26 @@ import com.arellomobile.mvp.presenter.InjectPresenter;
 import com.arellomobile.mvp.presenter.PresenterType;
 import com.harperjr.reviewsviewer.R;
 import com.harperjr.reviewsviewer.model.MovieReview;
-import com.harperjr.reviewsviewer.ui.reviews.fragment.FavoritesFragment;
-import com.harperjr.reviewsviewer.ui.reviews.mvp.ActivityPresenter;
-import com.harperjr.reviewsviewer.ui.reviews.mvp.ActivityView;
+import com.harperjr.reviewsviewer.ui.reviews.content.ContentFragment;
+import com.harperjr.reviewsviewer.ui.reviews.favorite.FavoritesFragment;
 import com.harperjr.reviewsviewer.ui.view.adapter.ReviewsPagerAdapter;
-import com.harperjr.reviewsviewer.ui.reviews.fragment.ActivityEventListener;
-import com.harperjr.reviewsviewer.ui.reviews.fragment.DetailedReviewFragment;
-import com.harperjr.reviewsviewer.ui.reviews.fragment.ReviewsFragment;
+import com.harperjr.reviewsviewer.ui.reviews.content.fragment.ReviewFragment;
+import com.harperjr.reviewsviewer.ui.reviews.content.fragment.ReviewsFragment;
 import com.harperjr.reviewsviewer.ui.view.ReviewsViewPager;
+import com.harperjr.reviewsviewer.ui.view.adapter.ReviewsRecyclerAdapter;
 
 public class ReviewsActivity extends MvpAppCompatActivity implements ActivityView {
 
-    private ReviewsFragment reviewsFragment;
-    private DetailedReviewFragment detailedReviewFragment;
+    private static final String CONTENT_IN_STACK = "ContentInStack";
 
     private FrameLayout mainHolder;
+
+    private ContentFragment contentFragment;
+    private FavoritesFragment favoritesFragment;
 
     private Toolbar toolbar;
     private MenuItem searchItem;
     private MenuItem likeItem;
-
-    private ReviewsViewPager viewPager;
-
-    private ReviewsPagerAdapter reviewsPagerAdapter;
 
     @InjectPresenter(type = PresenterType.GLOBAL)
     public ActivityPresenter activityPresenter;
@@ -50,45 +47,24 @@ public class ReviewsActivity extends MvpAppCompatActivity implements ActivityVie
 
         setContentView(R.layout.activity_reviews);
 
-        this.reviewsFragment = new ReviewsFragment();
-        this.reviewsFragment.setInteractionListener(review -> activityPresenter.navigateToDetailed(review));
-        this.detailedReviewFragment = new DetailedReviewFragment();
-        this.reviewsPagerAdapter = new ReviewsPagerAdapter(getSupportFragmentManager());
-        this.reviewsPagerAdapter.setReviewsFragment(reviewsFragment);
-        this.reviewsPagerAdapter.setDetailedReviewFragment(detailedReviewFragment);
         this.toolbar = findViewById(R.id.tool_bar);
         this.mainHolder = findViewById(R.id.main_holder);
 
-        this.viewPager = mainHolder.findViewById(R.id.pager);
-        this.viewPager.setAdapter(reviewsPagerAdapter);
-        this.viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int page, float v, int i1) {
-            }
-
-            @Override
-            public void onPageSelected(int page) {
-                final boolean focusedOnDetailedPage = page == ReviewsPagerAdapter.DETAILED_REVIEW_PAGE;
-                if (focusedOnDetailedPage) {
-                    ReviewsActivity.this.viewPager.setScrollable(true);
-                } else {
-                    toolbar.setTitle(R.string.app_name);
-                    searchItem.setVisible(true);
-                    ReviewsActivity.this.viewPager.setScrollable(false);
-                }
-
-            }
-
-            @Override
-            public void onPageScrollStateChanged(int page) {
-            }
-        });
-
         setSupportActionBar(toolbar);
+
+        this.contentFragment = new ContentFragment();
+        this.favoritesFragment = new FavoritesFragment();
+
+        getSupportFragmentManager().beginTransaction()
+        .replace(R.id.main_holder, contentFragment)
+        .commit();
     }
 
     @Override
     public void onBackPressed() {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.main_holder, contentFragment)
+                .commit();
         super.onBackPressed();
     }
 
@@ -100,7 +76,7 @@ public class ReviewsActivity extends MvpAppCompatActivity implements ActivityVie
         likeItem = toolbar.getMenu().findItem(R.id.like);
 
         final SearchView searchView = (SearchView) searchItem.getActionView();
-        final ActivityEventListener activityEventListener = reviewsFragment;
+        final ActivityEventListener activityEventListener = contentFragment;
 
         searchItem.setOnActionExpandListener(new MenuItem.OnActionExpandListener() {
             @Override
@@ -121,20 +97,18 @@ public class ReviewsActivity extends MvpAppCompatActivity implements ActivityVie
             @Override
             public boolean onQueryTextSubmit(String s) {
                 typingHandler.removeCallbacks(null);
-
-                reviewsFragment.onSearching(s);
+                activityEventListener.onSearching(s);
                 searchView.clearFocus();
                 return true;
             }
             @Override
             public boolean onQueryTextChange(String s) {
-
                 typingHandler.removeCallbacksAndMessages(null);
                 if (s.equals("")) {
                     return false;
                 }
                 typingHandler.postDelayed(() -> {
-                    reviewsFragment.onSearching(s);
+                    activityEventListener.onSearching(s);
                     searchView.clearFocus();
                 }, COOL_DOWN);
                 return true;
@@ -142,28 +116,12 @@ public class ReviewsActivity extends MvpAppCompatActivity implements ActivityVie
         });
 
         likeItem.setOnMenuItemClickListener(v -> {
-
-            final FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
-            fragmentTransaction.replace(R.id.main_holder, new FavoritesFragment());
-            fragmentTransaction.commit();
-
+            getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.main_holder, favoritesFragment)
+                    .commit();
             return true;
         });
 
         return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public void navigateToDetailed(@NonNull final MovieReview movieReview) {
-        try {
-            this.detailedReviewFragment.load(movieReview);
-            this.toolbar.setTitle(movieReview.getDisplayTitle());
-
-            this.searchItem.setVisible(false);
-            this.searchItem.collapseActionView();
-            this.viewPager.setCurrentItem(1, true);
-        } catch (NullPointerException ex) {
-            //lazy
-        }
     }
 }

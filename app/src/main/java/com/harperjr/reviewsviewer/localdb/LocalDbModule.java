@@ -12,7 +12,10 @@ import javax.inject.Singleton;
 import dagger.Module;
 import dagger.Provides;
 
-@Module
+@Module(includes = {
+        RepositoryModule.class,
+        MapperModule.class
+})
 public class LocalDbModule {
 
     @Provides
